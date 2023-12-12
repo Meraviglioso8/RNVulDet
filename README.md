@@ -23,7 +23,7 @@ Dataset\_3 consists of 4,617 potential victim contracts, 43,051 potential malici
 
 ## Output
 - Chạy dataset 1 (Dataset có lỗ hỏng bad randomness)
-```
+```solidity
 "is_reported": true - Đã tìm thấy một điều gì đó đáng chú ý trong hợp đồng thông minh, và đã được báo cáo. Điều này ngụ ý rằng có thể có một lỗ hổng hoặc vấn đề liên quan đến việc sử dụng số ngẫu nhiên.
 
 "steps": 1 - Đây là số lượng bước hoặc hoạt động mà công cụ phải thực hiện để đưa ra kết luận của mình. Chỉ một bước ngụ ý rằng phân tích đó hoặc rất đơn giản hoặc là một kiểm tra cụ thể rất cụ thể đã được thực hiện.
@@ -37,8 +37,8 @@ Dataset\_3 consists of 4,617 potential victim contracts, 43,051 potential malici
 "todo_keys": 1 -Có ít nhất một khía cạnh quan trọng hoặc hoạt động cần được chú ý hoặc phân tích thêm. Nó có thể ngụ ý một đường dẫn chưa được khám phá trong mã hoặc một khu vực tiềm ẩn nơi mà lỗ hổng liên quan đến ngẫu nhiên có thể tồn tại.
 ```
 - Chạy dataset 2 (Dataset không có lỗ hỏng bad randomness)
-```
-"is_reported": false - Điều này cho thấy rằng công cụ không tìm thấy bất kỳ vấn đề hay lỗ hổng nào đáng chú ý liên quan đến việc sử dụng số ngẫu nhiên trong hợp đồng thông minh. Điều này chỉ ra rằng, ít nhất là theo khả năng và các kiểm tra của công cụ, hợp đồng thông minh không xuất hiện dấu hiệu của 'lỗ hổng ngẫu nhiên kém'.
+```solidity
+"is_reported": false - Công cụ không tìm thấy bất kỳ vấn đề hay lỗ hổng nào đáng chú ý liên quan đến việc sử dụng số ngẫu nhiên trong hợp đồng thông minh.
 
 "steps": 0 - Việc không có bất kỳ bước nào cho thấy rằng công cụ hoặc không cần thực hiện bất kỳ hoạt động nào để kết luận phân tích của mình, hoặc nó không tìm thấy bất kỳ đoạn mã nào liên quan để phân tích. Điều này có thể có nghĩa là hợp đồng thông minh không sử dụng số ngẫu nhiên theo cách mà công cụ được thiết kế để phân tích hoặc xem xét.
 
