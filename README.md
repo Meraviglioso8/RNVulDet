@@ -10,7 +10,7 @@ This repo is a python implementation of our *RNVulDet* – a tool that incorpora
 ## Usage
 
 ```
-python3 getSC.py
+python3 getData{x}.py
 python3 main.py {BYTECODE_FILE} [-o {OUTPUT_FILE}]
 ```
 
