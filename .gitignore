@@ -11,3 +11,9 @@ venv.bak/
 data/
 data2/
 data3/
+
+get_Dataset/data/
+get_Dataset/data2/
+get_Dataset/data3/
+
+.txt

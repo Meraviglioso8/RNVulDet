@@ -8,16 +8,16 @@ load_dotenv()
 api_key = os.getenv('API_KEY')
 
 # Replace 'yourfile.json' with your JSON file's name
-file_path = './dataset/dataset_2_popular_contracts.json'
+file_path = '../dataset/dataset_1_vulnerable_contracts.json'
 
 # Open the JSON file and load its contents into a Python variable
 with open(file_path, 'r') as file:
-    contract_addresses = json.load(file)
+    json_data = json.load(file)
 
 # Ensure the 'data' directory exists
-os.makedirs('data2', exist_ok=True)
+os.makedirs('data', exist_ok=True)
 
-# [Rest of your functions remain the same]
+# Function to get smart contract source code and bytecode
 def get_smart_contract_source_code(address):
     api_endpoint = f"https://api.etherscan.io/api?module=contract&action=getsourcecode&address={address}&apikey={api_key}"
     response = requests.get(api_endpoint)
@@ -55,21 +55,22 @@ def get_smart_contract_byte_code(address):
         return bytecode
     except Exception as e:
         print(f'An error occurred: {str(e)}')
-# Loop through each contract address in the list
-for address in contract_addresses:
+
+# Loop through each contract in json_data and get its source code and bytecode
+for contract in json_data:
+    address = contract['address']
     source_code = get_smart_contract_source_code(address)
     bytecode = get_smart_contract_byte_code(address)
-
     # If source code was found, write it to a .sol file
     if source_code:
-        file_path = os.path.join('data2', f"{address}.sol")
+        file_path = os.path.join('data', f"{address}.sol")
         with open(file_path, 'w') as file:
             file.write(source_code)
         print(f"Source code for {address} saved to {file_path}")
     
     # If bytecode was found, write it to a .bytecode file
     if bytecode:
-        bytecode_file_path = os.path.join('data2', f"{address}")
+        bytecode_file_path = os.path.join('data', f"{address}")
         with open(bytecode_file_path, 'w') as file:
             file.write(bytecode)
         print(f"Bytecode for {address} saved to {bytecode_file_path}")

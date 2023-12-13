@@ -8,7 +8,7 @@ load_dotenv()
 api_key = os.getenv('API_KEY')
 
 # Replace 'yourfile.json' with your JSON file's name
-file_path = './dataset/dataset_3_suspicious_transactions.json'
+file_path = '../dataset/dataset_3_suspicious_transactions.json'
 
 # Open the JSON file and load its contents into a Python variable
 with open(file_path, 'r') as file:
