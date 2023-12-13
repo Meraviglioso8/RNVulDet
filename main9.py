@@ -11,9 +11,10 @@ def compile_solidity_file(file_path):
     with open(file_path, 'r') as file:
         source_code = file.read()
 
-    version = get_solidity_version(source_code)
-    if not solcx.get_installed_solc_versions():
-        solcx.install_solc(version)
+    version = extract_version(get_solidity_version(source_code))
+    print(version)
+    if version not in solcx.get_installed_solc_versions():
+        solcx.install_solc(version, show_progress=True)
 
     compiled_code = solcx.compile_source(
         source_code,
@@ -23,8 +24,17 @@ def compile_solidity_file(file_path):
 
     return compiled_code[list(compiled_code.keys())[0]]['bin-runtime']
 
+def extract_version(version_string):
+    version_string = re.sub(r'^[<>=^]+', '', version_string)
+    pattern = re.compile(r'\b\d+\.\d+\.\d+\b')
+    match = re.search(pattern, version_string)
+    if match:
+        return match.group(0)
+    else:
+        return None
+
 def get_solidity_version(source_code):
-    version_regex = r'pragma solidity \^?(\d+\.\d+\.\d+);'
+    version_regex = r'pragma solidity ([><^]?=?\s?\^?\s?(\d+\.\d+\.\d+))(\s?[<]?=?\s?\^?\s?(\d+\.\d+\.\d+))?'
     match = re.search(version_regex, source_code)
     if match:
         return match.group(1)
