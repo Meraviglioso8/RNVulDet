@@ -7,6 +7,7 @@ load_dotenv()
 
 api_key = os.getenv('API_KEY')
 
+print(api_key)
 # Replace 'yourfile.json' with your JSON file's name
 file_path = '../dataset/dataset_1_vulnerable_contracts.json'
 
