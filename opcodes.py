@@ -255,6 +255,7 @@ special_op = {
     DIFFICULTY,
     GASLIMIT,
     MOD_TIME,
+    CHAINID,
 }
 
 caller_op = {
@@ -262,6 +263,8 @@ caller_op = {
     ORIGIN,
     CALLDATALOAD,
     CALLDATACOPY,
+    ADDRESS,
+    GASPRICE,
 }
 
 time_op = {
@@ -276,4 +279,9 @@ mod_op = {
     MULMOD,
 }
 
-taint_op = special_op | caller_op | time_op
+code_op = {
+    CODESIZE,
+    EXTCODESIZE,
+    EXTCODEHASH, 
+}
+taint_op = special_op | caller_op | time_op | code_op
