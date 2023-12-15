@@ -40,7 +40,7 @@ def decrement_version(version, existing_versions):
     else:
         # If the incremented patch version does not exist, increment the minor version
         # and reset the patch version to 0.
-        return f"{major}.{minor-1}.0"
+        return f"{major}.{minor-1}.23"
 
 def extract_version(version_string):
     version_string = re.sub(r'^[<>=^]+', '', version_string)
@@ -62,7 +62,7 @@ def compile_solidity_file(file_path):
     try:
         with open(file_path, 'r') as file:
             source_code = file.read()
-        
+
         pragma_line = find_pragma_line(file_path)
 
         if not pragma_line:
@@ -73,6 +73,7 @@ def compile_solidity_file(file_path):
             existing_versions=[line.strip() for line in file]
 
         pragma_version = get_solidity_version(pragma_line)
+
         if not pragma_version:
             print("Error extracting pragma version.")
             return None
@@ -98,41 +99,46 @@ def compile_solidity_file(file_path):
                 print("Error with < only")
                 return
         
-        elif "<" in pragma_version and ">"  in pragma_version and ">=" in pragma_version and "<=" in pragma_version: # Also have < and >
-            bigger_version_match = re.search(r'>\s*(\d+\.\d+\.\d+)', pragma_version)
-            smaller_version_match = re.search(r'<\s*(\d+\.\d+\.\d+)', pragma_version)
-            if bigger_version_match:
-                extracted_version = bigger_version_match.group(1)
-                extracted_version = increment_version(extracted_version, existing_versions)
-                
-                if (is_version_greater(extracted_version,smaller_version_match.group(1))):
-                    print("Error")
-                    return
-            else:
-                print("Error with <> pragma")
-                return
-            
-        elif "=" in pragma_version or ">=" in pragma_version or "<=" in pragma_version: # With =
-            extracted_version = re.search(r'=\s*(\d+\.\d+\.\d+)', pragma_version)
+        elif "<" in pragma_version and ">"  in pragma_version: # Also have < and >
+            extracted_version = re.search(r'(>=|>|<=|<)\s*(\d+\.\d+\.\d+)\s*(>=|>|<=|<)\s*(\d+\.\d+\.\d+)', pragma_version)
             if extracted_version:
-                extracted_version = extracted_version.group(1)
-            else:
-                print("Error with = ")
-                return
+                first_operator, first_version, second_operator, second_version = extracted_version.groups()
+
+                first_version = first_version.replace(first_operator, "").strip()
+                second_version = second_version.replace(second_operator, "").strip()
+
+                # Adjust the version based on the operator
+                if first_operator in ['>=', '>']:
+                    first_version = increment_version(first_version, existing_versions)
+                    print("First version:", first_version)
+                if second_operator in ['<=', '<']:
+                    second_version = decrement_version(second_version, existing_versions)
+                    print("Second version:", second_version)
+
+                # Compare the versions
+                if is_version_greater(first_version, second_version):
+                    print("Error. Invalid Version Range.")
+                    return
+                else:
+                    extracted_version = first_version
+        # Continue with your logic using extracted_version
+
         else:
-            print("Big Error")
+            print("Using pragma solidity in source code.")
             extracted_version = extract_version(pragma_version)
-            
+
         if (is_version_greater(extracted_version)):
             print("Invalid compile version")
-            return     
-
+            return  
+           
+        print("Running...")
+    
         if extracted_version not in solcx.get_installed_solc_versions():
             solcx.install_solc(extracted_version, show_progress=True)
 
         version = solcx.set_solc_version_pragma(extracted_version)
 
-        print("Running...")
+        
 
         print("Compile version using:",version)
         
@@ -141,8 +147,7 @@ def compile_solidity_file(file_path):
             solc_version=version,
             output_values=["bin-runtime"]
         )
-
-    except Exception as e:
+    except Exception as e: 
         print("Error!:", e)
         return
 
