@@ -1,0 +1,8 @@
+{
+    "is_reported": true,
+    "steps": 1,
+    "conditions": 6,
+    "call_values": 0,
+    "to_addresses": 0,
+    "todo_keys": 6
+}
