@@ -6,6 +6,14 @@ import re
 import solcx
 import engine
 from packaging import version
+import time
+
+def check_version(target, version_list):
+    # Convert the target version string to a Version object
+    target_version = version.Version(target)
+
+    # Check if the target version is in the list
+    return target_version in version_list
 
 def find_pragma_line(file_path):
     with open(file_path, 'r') as file:
@@ -132,16 +140,14 @@ def compile_solidity_file(file_path):
             return  
            
         print("Running...")
-    
-        if extracted_version not in solcx.get_installed_solc_versions():
+        if check_version(extracted_version,solcx.get_installed_solc_versions()) == False:
+            print("The version not exist yet. Installing")
             solcx.install_solc(extracted_version, show_progress=True)
 
         version = solcx.set_solc_version_pragma(extracted_version)
 
-        
-
         print("Compile version using:",version)
-        
+
         compiled_code = solcx.compile_source(
             source_code,
             solc_version=version,
@@ -150,7 +156,8 @@ def compile_solidity_file(file_path):
     except Exception as e: 
         print("Error!:", e)
         return
-
+    
+    
     return compiled_code[list(compiled_code.keys())[0]]['bin-runtime']
 
 
@@ -160,11 +167,13 @@ def read_versions_from_file(file_path):
 
 
 def main() -> None:
+    start_time = time.time()
     logging.disable()
     args = parse_args()
     bytecode=''
     if args.file.endswith('.sol'):  # Check if it's a Solidity file
         hexcode = compile_solidity_file(args.file)
+
         if hexcode is not None:
             bytecode = bytes.fromhex(hexcode)
     else:
@@ -173,7 +182,11 @@ def main() -> None:
     engine_ = engine.Engine(bytecode)
     report = engine_.run()
     output(args, engine_, report)
-    print("Done.")
+    
+    # Calculate the total runtime
+    end_time = time.time()
+    total_time = end_time - start_time
+    print(f"The program ran for {total_time} seconds.")
 
 def output(args, engine_: engine.Engine, report: bool) -> None:
     attr_names = (
