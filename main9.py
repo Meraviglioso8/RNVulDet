@@ -137,14 +137,14 @@ def compile_solidity_file(file_path):
 
         if (is_version_greater(extracted_version)):
             print("Invalid compile version")
-            return  
-           
-        print("Running...")
-        if check_version(extracted_version,solcx.get_installed_solc_versions()) == False:
-            print("The version not exist yet. Installing")
+            return     
+
+        if extracted_version not in solcx.get_installed_solc_versions():
             solcx.install_solc(extracted_version, show_progress=True)
 
         version = solcx.set_solc_version_pragma(extracted_version)
+
+        print("Running...")
 
         print("Compile version using:",version)
 
