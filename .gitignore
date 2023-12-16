@@ -15,5 +15,7 @@ data3/
 get_Dataset/data/
 get_Dataset/data2/
 get_Dataset/data3/
+get_Dataset/dataSpecific/
+get_Dataset/result/
 
 .txt

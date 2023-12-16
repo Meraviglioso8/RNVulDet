@@ -164,6 +164,7 @@ halt_op = {
 jump_op = {
     JUMP,
     JUMPI,
+    JUMPDEST,
 }
 
 arithmetic_op = {
@@ -256,6 +257,8 @@ special_op = {
     GASLIMIT,
     MOD_TIME,
     CHAINID,
+    BALANCE,
+    SELFBALANCE,
 }
 
 caller_op = {
@@ -265,6 +268,7 @@ caller_op = {
     CALLDATACOPY,
     ADDRESS,
     GASPRICE,
+    CALLDATASIZE,
 }
 
 time_op = {
