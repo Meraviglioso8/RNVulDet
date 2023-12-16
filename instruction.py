@@ -41,9 +41,6 @@ class Instruction:
 
     def is_call_op(self):
         return self.opcode in opcodes.call_op
-    
-    def is_code_op(self):
-        return self.opcode in opcodes.code_op
 
     def is_commutative_op(self):
         return self.opcode in opcodes.commutative_op
