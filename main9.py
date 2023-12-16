@@ -38,17 +38,25 @@ def increment_version(version, existing_versions):
         # and reset the patch version to 0.
         return f"{major}.{minor+1}.0"
 
-def decrement_version(version, existing_versions):
-    major, minor, patch = map(int, version.split('.'))
-    # Increment the patch version and check if it exists.
+def decrement_version(input_version, existing_versions):
+    major, minor, patch = map(int, input_version.split('.'))
+    # Decrement the patch version and check if it exists.
     patch -= 1
     new_version = f"{major}.{minor}.{patch}"
+
     if new_version in existing_versions:
         return new_version
     else:
-        # If the incremented patch version does not exist, increment the minor version
-        # and reset the patch version to 0.
-        return f"{major}.{minor-1}.23"
+        # If the decremented patch version does not exist, find the closest lower version
+        target_version = version.Version(input_version)
+        sorted_versions = sorted(version.Version(v) for v in existing_versions)
+
+        for v in reversed(sorted_versions):
+            if v < target_version:
+                return str(v)
+        
+        # Return None or some default value if no lower version is found
+        return None
 
 def extract_version(version_string):
     version_string = re.sub(r'^[<>=^]+', '', version_string)
