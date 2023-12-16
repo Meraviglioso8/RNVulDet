@@ -61,11 +61,11 @@ for address in contract_addresses:
     bytecode = get_smart_contract_byte_code(address)
 
     # If source code was found, write it to a .sol file
-    if source_code:
-        file_path = os.path.join('data2', f"{address}.sol")
-        with open(file_path, 'w') as file:
-            file.write(source_code)
-        print(f"Source code for {address} saved to {file_path}")
+    # if source_code:
+    #     file_path = os.path.join('data2', f"{address}.sol")
+    #     with open(file_path, 'w') as file:
+    #         file.write(source_code)
+    #     print(f"Source code for {address} saved to {file_path}")
     
     # If bytecode was found, write it to a .bytecode file
     if bytecode:

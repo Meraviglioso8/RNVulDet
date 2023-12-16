@@ -8,6 +8,8 @@ import solcx
 import engine
 from packaging import version
 import time
+import contextlib
+import io
 
 def check_version(target, version_list):
     # Convert the target version string to a Version object
@@ -251,22 +253,33 @@ def main(file_path: str, output_path: str = None) -> bool:
 
     return report
 
-def process_directory(directory_path: str):
-    false_count = 0
+def process_directory(directory_path: str, output_file):
+    true_count = 0
 
     for filename in os.listdir(directory_path):
         file_path = os.path.join(directory_path, filename)
-        try:
-            # Attempt to process the file
-            is_reported = main(file_path)
-            if not is_reported:
-                false_count += 1
-        except Exception as e:
-            print(f"Error processing {filename}: {e}")
+        with open(output_file, 'a') as f, io.StringIO() as buf, contextlib.redirect_stdout(buf):
+            try:
+                # Attempt to process the file
+                is_reported = main(file_path)
+                if not is_reported:
+                    true_count += 1
 
-    return false_count
+                # Capture the output and write it to the file
+                output = buf.getvalue()
+                f.write(f"File: {filename}\n{output}\n")
+            except Exception as e:
+                # Write any exception raised to the buffer and then to the file
+                print(f"Error processing {filename}: {e}")
+                output = buf.getvalue()
+                f.write(f"File: {filename}\n{output}\n")
+
+    return true_count
+
+# Specify the output file name
+output_file = 'result-RQ1-team.txt'
 
 # Call process_directory with your directory path
 directory_path = './get_Dataset/data'
-false_count = process_directory(directory_path)
-print(f"Number of files with 'is_reported': false = {false_count}")
+true_count = process_directory(directory_path,output_file)
+print(f"Number of files with 'is_reported': false = {true_count}")
