@@ -195,7 +195,10 @@ def main() -> None:
     end_time = time.time()
     total_time = end_time - start_time
     print(f"The program ran for {total_time} seconds.")
-
+def convert_to_serializable(inst_instance):
+    # Convert InstructionInstance to a serializable format (e.g., string or dict)
+    # This needs to be implemented based on how you want to represent InstructionInstance
+    return str(inst_instance)  # Example implementation
 def output(args, engine_: engine.Engine, report: bool) -> None:
     attr_names = (
         "conditions",
@@ -208,8 +211,16 @@ def output(args, engine_: engine.Engine, report: bool) -> None:
         "is_reported": report,
         "steps": engine_.step,
     }
+    # Details output
+    # for attr_name in attr_names:
+    #     attr = getattr(engine_, attr_name)
+    #     if attr:
+    #         res[attr_name] = [convert_to_serializable(inst) for inst in attr]
+    #     else: 
+    #         res[attr_name] = len(attr)
+
     for attr_name in attr_names:
-        attr = getattr(engine_, attr_name)
+        attr = getattr(engine_, attr_name) 
         res[attr_name] = len(attr)
 
     if args.output is not None:
