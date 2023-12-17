@@ -235,12 +235,22 @@ def main(file_path: str, output_path: str = None) -> bool:
     engine_ = engine.Engine(bytecode)
     report = engine_.run()
 
+    attr_names = (
+        "conditions",
+        "call_values",
+        "to_addresses",
+        "todo_keys",
+    )
+
     result = {
         "is_reported": report,
         "steps": engine_.step,
-        # ... [rest of the attributes] ...
     }
+    for attr_name in attr_names:
+        attr = getattr(engine_, attr_name)
+        result[attr_name] = len(attr)
 
+    
     if output_path:
         with open(output_path, "w") as f:
             json.dump(result, f, indent=4)
@@ -255,6 +265,7 @@ def main(file_path: str, output_path: str = None) -> bool:
 
 def process_directory(directory_path: str, output_file):
     true_count = 0
+    false_count = 0
 
     for filename in os.listdir(directory_path):
         file_path = os.path.join(directory_path, filename)
@@ -262,8 +273,10 @@ def process_directory(directory_path: str, output_file):
             try:
                 # Attempt to process the file
                 is_reported = main(file_path)
-                if not is_reported:
+                if is_reported:
                     true_count += 1
+                else:
+                    false_count += 1
 
                 # Capture the output and write it to the file
                 output = buf.getvalue()
@@ -274,12 +287,16 @@ def process_directory(directory_path: str, output_file):
                 output = buf.getvalue()
                 f.write(f"File: {filename}\n{output}\n")
 
-    return true_count
-
+    return true_count,false_count
+start_time = time.process_time()
 # Specify the output file name
 output_file = 'result-RQ1-team.txt'
 
 # Call process_directory with your directory path
-directory_path = './get_Dataset/data'
-true_count = process_directory(directory_path,output_file)
-print(f"Number of files with 'is_reported': false = {true_count}")
+directory_path = './get_Dataset/data2'
+true_count,false_count = process_directory(directory_path,output_file)
+end_time = time.process_time()  # End CPU timer
+cpu_total_time = end_time - start_time  # Calculate CPU run time
+print(f"The CPU run time of the program for RQ2 was {cpu_total_time} seconds.")
+print(f"Number of files with 'is_reported': true = {true_count}")
+print(f"Number of files with 'is_reported': false = {false_count}")

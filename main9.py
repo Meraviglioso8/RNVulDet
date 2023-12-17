@@ -212,16 +212,16 @@ def output(args, engine_: engine.Engine, report: bool) -> None:
         "steps": engine_.step,
     }
     # Details output
-    # for attr_name in attr_names:
-    #     attr = getattr(engine_, attr_name)
-    #     if attr:
-    #         res[attr_name] = [convert_to_serializable(inst) for inst in attr]
-    #     else: 
-    #         res[attr_name] = len(attr)
-
     for attr_name in attr_names:
-        attr = getattr(engine_, attr_name) 
-        res[attr_name] = len(attr)
+        attr = getattr(engine_, attr_name)
+        if attr:
+            res[attr_name] = [convert_to_serializable(inst) for inst in attr]
+        else: 
+            res[attr_name] = len(attr)
+
+    # for attr_name in attr_names:
+    #     attr = getattr(engine_, attr_name) 
+    #     res[attr_name] = len(attr)
 
     if args.output is not None:
         with open(args.output, "w") as f:
