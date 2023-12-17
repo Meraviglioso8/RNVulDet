@@ -38,17 +38,25 @@ def increment_version(version, existing_versions):
         # and reset the patch version to 0.
         return f"{major}.{minor+1}.0"
 
-def decrement_version(version, existing_versions):
-    major, minor, patch = map(int, version.split('.'))
-    # Increment the patch version and check if it exists.
+def decrement_version(input_version, existing_versions):
+    major, minor, patch = map(int, input_version.split('.'))
+    # Decrement the patch version and check if it exists.
     patch -= 1
     new_version = f"{major}.{minor}.{patch}"
+
     if new_version in existing_versions:
         return new_version
     else:
-        # If the incremented patch version does not exist, increment the minor version
-        # and reset the patch version to 0.
-        return f"{major}.{minor-1}.23"
+        # If the decremented patch version does not exist, find the closest lower version
+        target_version = version.Version(input_version)
+        sorted_versions = sorted(version.Version(v) for v in existing_versions)
+
+        for v in reversed(sorted_versions):
+            if v < target_version:
+                return str(v)
+        
+        # Return None or some default value if no lower version is found
+        return None
 
 def extract_version(version_string):
     version_string = re.sub(r'^[<>=^]+', '', version_string)
@@ -187,7 +195,10 @@ def main() -> None:
     end_time = time.time()
     total_time = end_time - start_time
     print(f"The program ran for {total_time} seconds.")
-
+def convert_to_serializable(inst_instance):
+    # Convert InstructionInstance to a serializable format (e.g., string or dict)
+    # This needs to be implemented based on how you want to represent InstructionInstance
+    return str(inst_instance)  # Example implementation
 def output(args, engine_: engine.Engine, report: bool) -> None:
     attr_names = (
         "conditions",
@@ -200,9 +211,17 @@ def output(args, engine_: engine.Engine, report: bool) -> None:
         "is_reported": report,
         "steps": engine_.step,
     }
+    # Details output
     for attr_name in attr_names:
         attr = getattr(engine_, attr_name)
-        res[attr_name] = len(attr)
+        if attr:
+            res[attr_name] = [convert_to_serializable(inst) for inst in attr]
+        else: 
+            res[attr_name] = len(attr)
+
+    # for attr_name in attr_names:
+    #     attr = getattr(engine_, attr_name) 
+    #     res[attr_name] = len(attr)
 
     if args.output is not None:
         with open(args.output, "w") as f:

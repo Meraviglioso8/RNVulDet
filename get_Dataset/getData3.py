@@ -59,7 +59,7 @@ def get_smart_contract_byte_code(address):
 # get victim
 for item in json_data:
     # Extract the victim contract address
-    victim_address = item['potential_victim_contract']
+    victim_address = '0x9f35334c9dc3c66347d33558b7cfe800380391b5'
 
     # Define file paths for the victim contract
     victim_file_path = os.path.join('data3', f"{victim_address}.sol")

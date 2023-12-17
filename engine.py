@@ -70,7 +70,6 @@ class Engine:
                 opcodes.ORIGIN,
                 opcodes.CALLDATALOAD,
                 opcodes.CALLDATACOPY,
-                opcodes.CALLDATASIZE,
             }:
                 for item in self.tracker.state.path[:-1]:
                     condition = item.condition

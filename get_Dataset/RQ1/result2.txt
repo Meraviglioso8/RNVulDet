@@ -1,0 +1,172 @@
+mera@Admin:/mnt/d/RNVulDet - Copy$ python3 count.py
+{
+    "is_reported": true,
+    "steps": 2
+}
+The program ran for 140.04021048545837 seconds.
+{
+    "is_reported": true,
+    "steps": 2
+}
+The program ran for 97.71121096611023 seconds.
+{
+    "is_reported": true,
+    "steps": 2
+}
+The program ran for 0.8740003108978271 seconds.
+{
+    "is_reported": false,
+    "steps": 1
+}
+The program ran for 0.04796743392944336 seconds.
+{
+    "is_reported": true,
+    "steps": 1
+}
+The program ran for 0.1082906723022461 seconds.
+{
+    "is_reported": true,
+    "steps": 1
+}
+The program ran for 0.25124573707580566 seconds.
+{
+    "is_reported": true,
+    "steps": 1
+}
+The program ran for 1.905207872390747 seconds.
+{
+    "is_reported": true,
+    "steps": 1
+}
+The program ran for 0.17003250122070312 seconds.
+{
+    "is_reported": true,
+    "steps": 2
+}
+The program ran for 25.81558895111084 seconds.
+{
+    "is_reported": true,
+    "steps": 2
+}
+The program ran for 113.67463827133179 seconds.
+{
+    "is_reported": true,
+    "steps": 2
+}
+The program ran for 45.93485140800476 seconds.
+{
+    "is_reported": true,
+    "steps": 1
+}
+The program ran for 2.7092151641845703 seconds.
+{
+    "is_reported": true,
+    "steps": 2
+}
+The program ran for 59.64973831176758 seconds.
+{
+    "is_reported": true,
+    "steps": 1
+}
+The program ran for 0.4983208179473877 seconds.
+{
+    "is_reported": true,
+    "steps": 2
+}
+The program ran for 2.116657018661499 seconds.
+{
+    "is_reported": true,
+    "steps": 1
+}
+The program ran for 0.08228158950805664 seconds.
+{
+    "is_reported": true,
+    "steps": 1
+}
+The program ran for 0.02564716339111328 seconds.
+{
+    "is_reported": true,
+    "steps": 2
+}
+The program ran for 117.11223578453064 seconds.
+{
+    "is_reported": true,
+    "steps": 2
+}
+The program ran for 0.814051628112793 seconds.
+{
+    "is_reported": true,
+    "steps": 2
+}
+The program ran for 38.89671492576599 seconds.
+{
+    "is_reported": true,
+    "steps": 1
+}
+The program ran for 0.34996461868286133 seconds.
+{
+    "is_reported": true,
+    "steps": 1
+}
+The program ran for 0.16229724884033203 seconds.
+{
+    "is_reported": true,
+    "steps": 1
+}
+The program ran for 0.032659053802490234 seconds.
+{
+    "is_reported": true,
+    "steps": 1
+}
+The program ran for 0.41570281982421875 seconds.
+{
+    "is_reported": true,
+    "steps": 2
+}
+The program ran for 107.97198176383972 seconds.
+{
+    "is_reported": true,
+    "steps": 1
+}
+The program ran for 4.385800361633301 seconds.
+{
+    "is_reported": true,
+    "steps": 1
+}
+The program ran for 3.603043556213379 seconds.
+{
+    "is_reported": true,
+    "steps": 1
+}
+The program ran for 0.11527872085571289 seconds.
+{
+    "is_reported": false,
+    "steps": 2
+}
+The program ran for 0.3127012252807617 seconds.
+{
+    "is_reported": true,
+    "steps": 1
+}
+The program ran for 0.07157301902770996 seconds.
+{
+    "is_reported": true,
+    "steps": 1
+}
+The program ran for 0.07109808921813965 seconds.
+{
+    "is_reported": true,
+    "steps": 1
+}
+The program ran for 0.10808801651000977 seconds.
+{
+    "is_reported": false,
+    "steps": 2
+}
+The program ran for 0.7564666271209717 seconds.
+{
+    "is_reported": true,
+    "steps": 1
+}
+The program ran for 0.0944514274597168 seconds.
+Number of files with 'is_reported': false = 3

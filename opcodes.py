@@ -164,7 +164,6 @@ halt_op = {
 jump_op = {
     JUMP,
     JUMPI,
-    JUMPDEST,
 }
 
 arithmetic_op = {
@@ -258,7 +257,6 @@ special_op = {
     MOD_TIME,
     CHAINID,
     BALANCE,
-    SELFBALANCE,
 }
 
 caller_op = {
@@ -283,9 +281,4 @@ mod_op = {
     MULMOD,
 }
 
-code_op = {
-    CODESIZE,
-    EXTCODESIZE,
-    EXTCODEHASH, 
-}
-taint_op = special_op | caller_op | time_op | code_op
+taint_op = special_op | caller_op | time_op
