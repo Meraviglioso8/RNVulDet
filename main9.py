@@ -74,97 +74,108 @@ def get_solidity_version(first_line):
         else:
             return None
 
-def compile_solidity_file(file_path):
-    try:
-        with open(file_path, 'r') as file:
-            source_code = file.read()
-
-        pragma_line = find_pragma_line(file_path)
-
-        if not pragma_line:
-            print("Pragma line not found.")
-            return None
-
-        with open('./versions.txt', 'r') as file:
-            existing_versions=[line.strip() for line in file]
-
-        pragma_version = get_solidity_version(pragma_line)
-
-        if not pragma_version:
-            print("Error extracting pragma version.")
-            return None
-        
-        extracted_version =''
-        
-
-        if ">" in pragma_version and "<" not in pragma_version: # Only > 
-            extracted_version_match = re.search(r'>\s*(\d+\.\d+\.\d+)', pragma_version)
-            if extracted_version_match:
-                extracted_version = extracted_version_match.group(1)
-                extracted_version = increment_version(extracted_version, existing_versions)
-            else:
-                print("Error with > only")
-                return
+def compile_solidity_file(file_path, user_version=None):
+    if user_version:
+            try:
+                solcx.install_solc(user_version, show_progress=True)
+                version = solcx.set_solc_version_pragma(user_version)
+                with open(file_path, 'r') as file:
+                    source_code = file.read()
+            except Exception as e:
+                print("Error:",e)
+    else:
+        try:
             
-        elif "<" in pragma_version and ">" not in pragma_version: # Only <
-            extracted_version_match = re.search(r'<\s*(\d+\.\d+\.\d+)', pragma_version)
-            if extracted_version_match:
-                extracted_version = extracted_version_match.group(1)
-                extracted_version = decrement_version(extracted_version, existing_versions)
-            else:
-                print("Error with < only")
-                return
-        
-        elif "<" in pragma_version and ">"  in pragma_version: # Also have < and >
-            extracted_version = re.search(r'(>=|>|<=|<)\s*(\d+\.\d+\.\d+)\s*(>=|>|<=|<)\s*(\d+\.\d+\.\d+)', pragma_version)
-            if extracted_version:
-                first_operator, first_version, second_operator, second_version = extracted_version.groups()
 
-                first_version = first_version.replace(first_operator, "").strip()
-                second_version = second_version.replace(second_operator, "").strip()
+            pragma_line = find_pragma_line(file_path)
 
-                # Adjust the version based on the operator
-                if first_operator in ['>=', '>']:
-                    first_version = increment_version(first_version, existing_versions)
-                    print("First version:", first_version)
-                if second_operator in ['<=', '<']:
-                    second_version = decrement_version(second_version, existing_versions)
-                    print("Second version:", second_version)
+            if not pragma_line:
+                print("Pragma line not found.")
+                return None
 
-                # Compare the versions
-                if is_version_greater(first_version, second_version):
-                    print("Error. Invalid Version Range.")
-                    return
+            with open('./versions.txt', 'r') as file:
+                existing_versions=[line.strip() for line in file]
+
+            pragma_version = get_solidity_version(pragma_line)
+
+            if not pragma_version:
+                print("Error extracting pragma version.")
+                return None
+            
+            extracted_version =''
+            
+
+            if ">" in pragma_version and "<" not in pragma_version: # Only > 
+                extracted_version_match = re.search(r'>\s*(\d+\.\d+\.\d+)', pragma_version)
+                if extracted_version_match:
+                    extracted_version = extracted_version_match.group(1)
+                    extracted_version = increment_version(extracted_version, existing_versions)
                 else:
-                    extracted_version = first_version
-        # Continue with your logic using extracted_version
+                    print("Error with > only")
+                    return
+                
+            elif "<" in pragma_version and ">" not in pragma_version: # Only <
+                extracted_version_match = re.search(r'<\s*(\d+\.\d+\.\d+)', pragma_version)
+                if extracted_version_match:
+                    extracted_version = extracted_version_match.group(1)
+                    extracted_version = decrement_version(extracted_version, existing_versions)
+                else:
+                    print("Error with < only")
+                    return
+            
+            elif "<" in pragma_version and ">"  in pragma_version: # Also have < and >
+                extracted_version = re.search(r'(>=|>|<=|<)\s*(\d+\.\d+\.\d+)\s*(>=|>|<=|<)\s*(\d+\.\d+\.\d+)', pragma_version)
+                if extracted_version:
+                    first_operator, first_version, second_operator, second_version = extracted_version.groups()
 
-        else:
-            print("Using pragma solidity in source code.")
-            extracted_version = extract_version(pragma_version)
+                    first_version = first_version.replace(first_operator, "").strip()
+                    second_version = second_version.replace(second_operator, "").strip()
 
-        if (is_version_greater(extracted_version)):
-            print("Invalid compile version")
-            return     
+                    # Adjust the version based on the operator
+                    if first_operator in ['>=', '>']:
+                        first_version = increment_version(first_version, existing_versions)
+                        print("First version:", first_version)
+                    if second_operator in ['<=', '<']:
+                        second_version = decrement_version(second_version, existing_versions)
+                        print("Second version:", second_version)
 
-        if extracted_version not in solcx.get_installed_solc_versions():
-            solcx.install_solc(extracted_version, show_progress=True)
+                    # Compare the versions
+                    if is_version_greater(first_version, second_version):
+                        print("Error. Invalid Version Range.")
+                        return
+                    else:
+                        extracted_version = first_version
+            # Continue with your logic using extracted_version
 
-        version = solcx.set_solc_version_pragma(extracted_version)
+            else:
+                print("Using pragma solidity in source code.")
+                extracted_version = extract_version(pragma_version)
 
-        print("Running...")
+            if (is_version_greater(extracted_version)):
+                print("Invalid compile version")
+                return     
 
-        print("Compile version using:",version)
+            if extracted_version not in solcx.get_installed_solc_versions():
+                solcx.install_solc(extracted_version, show_progress=True)
 
+            version = solcx.set_solc_version_pragma(extracted_version)
+
+            
+        except Exception as e: 
+            print("Error!:", e)
+            return
+    print("Running...")
+    print("Compile version using:",version)
+
+    try:
         compiled_code = solcx.compile_source(
-            source_code,
-            solc_version=version,
-            output_values=["bin-runtime"]
-        )
-    except Exception as e: 
+                source_code,
+                solc_version=version,
+                output_values=["bin-runtime"]
+            )
+    except Exception as e:
         print("Error!:", e)
         return
-    
     
     return compiled_code[list(compiled_code.keys())[0]]['bin-runtime']
 
@@ -179,10 +190,15 @@ def main() -> None:
     logging.disable()
     args = parse_args()
     bytecode=''
-    if args.file.endswith('.sol'):  # Check if it's a Solidity file
+
+    user_version = None
+    if args.version and args.file.endswith('.sol'):
+        user_version = args.version
+        hexcode = compile_solidity_file(args.file, user_version)
+    elif args.file.endswith('.sol'):
         hexcode = compile_solidity_file(args.file)
 
-        if hexcode is not None:
+    if hexcode is not None:
             bytecode = bytes.fromhex(hexcode)
     else:
         bytecode = read_bytecode(args.file)
@@ -195,10 +211,12 @@ def main() -> None:
     end_time = time.time()
     total_time = end_time - start_time
     print(f"The program ran for {total_time} seconds.")
+
 def convert_to_serializable(inst_instance):
     # Convert InstructionInstance to a serializable format (e.g., string or dict)
     # This needs to be implemented based on how you want to represent InstructionInstance
     return str(inst_instance)  # Example implementation
+
 def output(args, engine_: engine.Engine, report: bool) -> None:
     attr_names = (
         "conditions",
@@ -231,22 +249,13 @@ def output(args, engine_: engine.Engine, report: bool) -> None:
 
 
 def parse_args():
-    parser = argparse.ArgumentParser(description="None")
-    parser.add_argument(
-        "file",
-        help="file containing hex-encoded bytecode string",
-        metavar="BYTECODE_FILE",
-    )
-    parser.add_argument(
-        "-o",
-        "--output",
-        help="output information in json format",
-        metavar="OUTPUT_FILE",
-    )
 
-    args = parser.parse_args()
+    parser = argparse.ArgumentParser(description="Solidity Compiler Tool")
+    parser.add_argument("file", help="file containing Solidity code or hex-encoded bytecode", metavar="FILE")
+    parser.add_argument("-v", "--version", help="specific Solidity compiler version to use", metavar="VERSION")
+    parser.add_argument("-o", "--output", help="output information in json format", metavar="OUTPUT_FILE")
 
-    return args
+    return parser.parse_args()
 
 
 def read_bytecode(filename: str) -> bytes:
