@@ -2,7 +2,7 @@
 
 - This repository originates from the paper titled "Demystifying Random Number in Ethereum Smart Contract: Taxonomy, Vulnerability Identification, and Attack Detection" , serving the purpose of fulfilling a course assignment.
 
-- This repository houses a Python implementation of modified RNVulDet (mRNVulDet), a powerful tool designed to enhance the security analysis of smart contracts written in Solidity. mRNVulDet integrates sophisticated taint analysis techniques to automatically identify and uncover vulnerabilities associated with random number generation. By leveraging advanced algorithms, mRNVulDet scans Solidity or Bytecode input files to detect potential weaknesses in the random number generation process, thereby fortifying the resilience of blockchain applications against exploitation attempts.
+- This repository houses a Python implementation of modified RNVulDet (mRNVulDet), a powerful tool designed to enhance the security analysis of smart contracts written in Solidity. mRNVulDet integrates sophisticated taint analysis techniques to automatically identify and uncover vulnerabilities associated with random number generation. By leveraging advanced algorithms, mRNVulDet scans Solidity or Bytecode input files to detect potential weaknesses in the random number generation process, enabling it to identify previously undetected weaknesses of RNVulDet and potentially providing more comprehensive insights into the security posture of Ethereum smart contracts.
 
 
 ## System Overview
@@ -22,11 +22,14 @@ python3 main.py {BYTECODE_FILE} [-o {OUTPUT_FILE}]
 ```
 
 ## Dataset
-Dataset\_1 contains 34 smart contracts reported to possess the random number bug.
+- Dataset\_1 contains 34 smart contracts reported to possess the random number bug.
 
-Dataset\_2 includes a total of 214 smart contracts that do not have random number vulnerabilities.
+- Dataset\_2 includes a total of 214 smart contracts that do not have random number vulnerabilities.
 
-Dataset\_3 consists of 4,617 potential victim contracts, 43,051 potential malicious contracts, and 49,951 suspicious transactions for experiments.
+- Dataset\_3 consists of 4,617 potential victim contracts, 43,051 potential malicious contracts, and 49,951 suspicious transactions for experiments.
+
+## Result
+- mRNVulDet can detect vulnerabilities related to bad randomness in Solidity smart contracts. The results, when compared to the original tool, showed 2 additional true positives and 1 false positive
 
 ## Output
 - Dataset_1 output
