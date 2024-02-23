@@ -1,5 +1,7 @@
 # modified RNVulDet (mRNVulDet)
 
+- This repository originates from the paper titled "Demystifying Random Number in Ethereum Smart Contract: Taxonomy, Vulnerability Identification, and Attack Detection" , serving the purpose of fulfilling a course assignment.
+
 - This repository houses a Python implementation of modified RNVulDet (mRNVulDet), a powerful tool designed to enhance the security analysis of smart contracts written in Solidity. mRNVulDet integrates sophisticated taint analysis techniques to automatically identify and uncover vulnerabilities associated with random number generation. By leveraging advanced algorithms, mRNVulDet scans Solidity or Bytecode input files to detect potential weaknesses in the random number generation process, thereby fortifying the resilience of blockchain applications against exploitation attempts.
 
 
