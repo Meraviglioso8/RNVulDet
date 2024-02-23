@@ -1,11 +1,16 @@
-# RNVulDet
+# modified RNVulDet (mRNVulDet)
 
-This repository houses a Python implementation of RNVulDet, a powerful tool designed to enhance the security analysis of smart contracts written in Solidity. RNVulDet integrates sophisticated taint analysis techniques to automatically identify and uncover vulnerabilities associated with random number generation. By leveraging advanced algorithms, RNVulDet scans Solidity or Bytecode input files to detect potential weaknesses in the random number generation process, thereby fortifying the resilience of blockchain applications against exploitation attempts.
+- This repository houses a Python implementation of modified RNVulDet (mRNVulDet), a powerful tool designed to enhance the security analysis of smart contracts written in Solidity. mRNVulDet integrates sophisticated taint analysis techniques to automatically identify and uncover vulnerabilities associated with random number generation. By leveraging advanced algorithms, mRNVulDet scans Solidity or Bytecode input files to detect potential weaknesses in the random number generation process, thereby fortifying the resilience of blockchain applications against exploitation attempts.
 
 
 ## Overview
-<div align=center><img width="880" height="280" src="./figs/overview.png"/></div>
-*RNVulDet* comprises preprocessing and simulated execution. This Figure depicts the overall architecture of our proposed *RNVulDet*. In particular, RNVulDet engages in four main components to perform taint analysis, i.e., stack state examination, memory segmentation, storage key-value pair comparison, and transaction replay.
+<div align=center><img width="880" height="280" src="./figs/improved.png"/></div>
+
+- **mRNVulDet** (Random Number Vulnerability Detection) which contain a feature using dynamic taint analysis tool for tracing and identifying the random number vulnerabilities. Not only that, this tool simulated the runtime environment of the Ethereum Virtual Machine, which can symbolically executes each single EVM instruction one at a time.
+
+- The implementation of an additional module that accepts Solidity source code represents a significant enhancement in the usability and flexibility of the system.
+  
+- According to RNVulDet, it focuses on seven main opcodes as taint sources: **BLOCKHASH, COINBASE, DIFFICULTY, GASLIMIT, MOD_TIME, NUMBER, and TIMESTAMP**. However, as highlighted in DevCon, on-chain information like **CHAINID, ADDRESS, SELFBALANCE, BALANCE, CALLER, GASPRICE, CODESIZE, CALLDATASIZE, and EXTCODEHASH** can also serve as random seeds. After reviewing the opcode file of Dice2Win which uses **BLOCKHASH** for the reveal function (to select winners) and **BALANCE** for certain conditions, it becomes evident that the scope of potential taint sources in smart contract security is broad and requires continual updating and refinement.
 
 ## Usage
 
@@ -23,7 +28,7 @@ Dataset\_3 consists of 4,617 potential victim contracts, 43,051 potential malici
 
 ## Output
 - Dataset_1 output
-```solidity
+```
 "is_reported": true - Something noteworthy has been found in the smart contract and reported. Implies a potential vulnerability or issue related to random number usage.
 
 "steps": 1 - Number of steps or operations the tool had to perform to reach its conclusion. A single step implies either a straightforward analysis or a very specific check.
@@ -38,7 +43,7 @@ Dataset\_3 consists of 4,617 potential victim contracts, 43,051 potential malici
 
 ```
 - Dataset_2 output
-```solidity
+```
 "is_reported": false - No significant issues or vulnerabilities related to random number usage were found by the tool in the smart contract.
 
 "steps": 0 - The absence of any steps indicates that either the tool did not need to perform any operations to reach its analysis conclusion, or it did not find any relevant code to analyze. This may suggest that the smart contract does not use randomness in the way the tool is designed to analyze or consider.
